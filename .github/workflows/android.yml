@@ -52,4 +52,4 @@ jobs:
         with:
           name: ndk-openssl-lib
           path: |
-            ./android-lib/
+            ./android-lib-openssl/

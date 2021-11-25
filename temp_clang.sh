@@ -236,10 +236,13 @@ export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSR
 
 #####################################################################
 
-export PREFIX=$(pwd)/android-lib
+export PREFIX=$(pwd)/android-lib-openssl
+if [ ! -d $(pwd)/android-lib-openssl ];then
+ mkdir $(pwd)/android-lib 
+fi
 
 if [ ! -d $PREFIX  ];then
-  mkdir $PREFIX
+ mkdir $PREFIX
 fi
 
 
@@ -264,7 +267,7 @@ fi
 
 cd  openssl
 ## 最终成MakeFile
- ./config  no-asm  $THE_ARCH shared no-cast no-idea no-camellia  --prefix=$PREFIX 
+ ./config --libdir=$PREFIX no-asm shared no-cast no-idea no-camellia  --prefix=$PREFIX 
 
 # 如何支持https 需要先交叉编译https
 
