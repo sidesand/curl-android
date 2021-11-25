@@ -236,7 +236,7 @@ export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSR
 
 #####################################################################
 
-export PREFIX=$(pwd)/android-lib
+export PREFIX=$(pwd)/android-lib/$THE_ARCHgit 
 
 if [ ! -d $PREFIX  ];then
   mkdir $PREFIX
@@ -269,6 +269,12 @@ cd  openssl
 # 如何支持https 需要先交叉编译https
 
 make -j3
+
+EXITCODE=$?
+if [ $EXITCODE -ne 0 ]; then
+	echo "Error running program"
+	exit $EXITCODE
+fi
 
 make install
 
