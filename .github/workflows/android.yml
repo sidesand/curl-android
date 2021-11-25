@@ -1,0 +1,56 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # 克隆代码
+      - uses: actions/checkout@v2
+      # 克隆 子模块
+      - name: Checkout submodules
+        shell: bash
+        run: |
+          # If your submodules are configured to use SSH instead of HTTPS please uncomment the following line
+          # git config --global url."https://github.com/".insteadOf "git@github.com:"
+          auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+          git submodule sync --recursive
+          git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+       # 添加ndk    
+      - name: Setup Android NDK
+      # uses: nttld/setup-ndk@b2abc75192ee2a1ec118c8238fd86dec6d96dc43
+        uses: nttld/setup-ndk@v1.0.6
+        id: setup-ndk
+        with:
+          # Exact version to use
+          ndk-version: r21
+          # Add installation directory to path
+          add-to-path: false
+      # 执行shell
+      - name: add autoconf automake libtool
+        run: brew install autoconf automake libtool    
+      - name: ndk bulid    
+        working-directory:   
+        run: |
+          pwd  
+          chmod +x temp_clang.sh
+          echo ${{ steps.setup-ndk.outputs.ndk-path }}
+          export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
+          ./temp_clang.sh
+          ls
+          cd android-lib
+          ls
+      # - name: Upload a Build Artifact  
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: ndk-curl-lib
+      #     path: |
+      #       ./prebuilt-with-ssl/android/
