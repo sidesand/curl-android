@@ -52,8 +52,6 @@ jobs:
         with:
           name: ndk-openssl-lib
           path: |
-            ./android-lib-openssl/
-            !./android-lib-openssl/**/ssl
-            !../android-lib-openssl/**/bin
-            !../android-lib-openssl/**/share
+            ./android-lib-openssl/**/soLib/
+            ./android-lib-openssl/**/include/
             
