@@ -264,7 +264,7 @@ fi
 
 cd  openssl
 ## 最终成MakeFile
- ./config no-asm shared no-cast no-idea no-camellia  --prefix=$PREFIX 
+ ./config $THE_ARCH no-asm shared no-cast no-idea no-camellia  --prefix=$PREFIX 
 
 # 如何支持https 需要先交叉编译https
 
