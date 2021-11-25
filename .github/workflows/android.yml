@@ -44,7 +44,7 @@ jobs:
           chmod +x temp_clang.sh
           echo ${{ steps.setup-ndk.outputs.ndk-path }}
           export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
-          ./temp_clang.sh
+          ./temp_clang.sh armeabi-v7a
           ls
           cd android-lib
           ls
