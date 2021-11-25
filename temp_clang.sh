@@ -236,7 +236,7 @@ export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSR
 
 #####################################################################
 
-export PREFIX=$(pwd)/android-lib-openssl
+export PREFIX=$(pwd)/android-lib-openssl$AOSP_ABI
 if [ ! -d $(pwd)/android-lib-openssl ];then
  mkdir $(pwd)/android-lib 
 fi
@@ -267,7 +267,7 @@ fi
 
 cd  openssl
 ## 最终成MakeFile
- ./config --libdir=$PREFIX no-asm shared no-cast no-idea no-camellia  --prefix=$PREFIX 
+ ./config no-asm shared no-cast no-idea no-camellia  --prefix=$PREFIX  zlib
 
 # 如何支持https 需要先交叉编译https
 
