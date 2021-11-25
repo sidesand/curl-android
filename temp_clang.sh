@@ -236,7 +236,7 @@ export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSR
 
 #####################################################################
 
-export PREFIX=$(pwd)/android-lib/$THE_ARCH 
+export PREFIX=$(pwd)/android-lib
 
 if [ ! -d $PREFIX  ];then
   mkdir $PREFIX
