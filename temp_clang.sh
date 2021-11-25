@@ -236,7 +236,7 @@ export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSR
 
 #####################################################################
 
-export PREFIX=$(pwd)/android-lib/$THE_ARCHgit 
+export PREFIX=$(pwd)/android-lib/$THE_ARCH 
 
 if [ ! -d $PREFIX  ];then
   mkdir $PREFIX
@@ -264,17 +264,11 @@ fi
 
 cd  openssl
 ## 最终成MakeFile
- ./config $THE_ARCH no-asm shared no-cast no-idea no-camellia  --prefix=$PREFIX 
+ ./config  no-asm $THE_ARCH shared no-cast no-idea no-camellia  --prefix=$PREFIX 
 
 # 如何支持https 需要先交叉编译https
 
 make -j3
-
-EXITCODE=$?
-if [ $EXITCODE -ne 0 ]; then
-	echo "Error running program"
-	exit $EXITCODE
-fi
 
 make install
 
