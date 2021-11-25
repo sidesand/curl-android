@@ -245,9 +245,15 @@ if [ ! -d $PREFIX  ];then
  mkdir $PREFIX
 fi
 
-export outPutlib = $PREFIX/$AOSP_ABI/soLib
+export outPutlib=$PREFIX/$AOSP_ABI/soLib
 
- 
+if [ ! -d $PREFIX/$AOSP_AB ];then
+ mkdir $PREFIX/$AOSP_AB
+fi
+
+if [ ! -d $outPutlib ];then
+ mkdir $outPutlib
+fi 
 
 export CC="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang --sysroot=$AOSP_SYSROOT"
 
