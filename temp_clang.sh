@@ -312,7 +312,7 @@ if [ $EXITCODE -ne 0 ]; then
 	exit $EXITCODE
 fi
 
-make -j6
+make -j$JOBS
 
 make install
 
@@ -356,7 +356,7 @@ fi
     --without-zlib
 
 
-make -j6
+make -j$JOBS
 
 make install
 
