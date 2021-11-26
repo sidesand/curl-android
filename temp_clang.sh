@@ -309,7 +309,7 @@ fi
 
 cd curl
 # # ./Configure android no-asm no-shared no-cast no-idea no-camellia no-whirpool
-if [ ! -x "$CURLPATH/configure" ]; then
+if [ ! -x "configure" ]; then
 	echo "Curl needs external tools to be compiled"
 	echo "Make sure you have autoconf, automake and libtool installed"
 
@@ -333,5 +333,12 @@ fi
     --without-zlib
 
 make -j4
+
+EXITCODE=$?
+if [ $EXITCODE -ne 0 ]; then
+	echo "Error building the libssl and libcrypto"
+	cd $PWD
+	exit $EXITCODE
+fi
 
 [ "$0" = "$BASH_SOURCE" ] && exit 0 || return 0cd .
