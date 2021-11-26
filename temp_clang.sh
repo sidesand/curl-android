@@ -276,7 +276,7 @@ if [ ! -z "$VERBOSE" ] && [ "$VERBOSE" != "0" ]; then
 
 fi
 
-cd  curl
+cd  openssl
 
 
 # PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$PATH
@@ -293,14 +293,15 @@ make -j4
 # CPPFLAGS="-I$(pwd)/openssl/include" LDFLAGS="-L$(pwd)/openssl/lib"
 
 
+cd curl
 # # ./Configure android no-asm no-shared no-cast no-idea no-camellia no-whirpool
 export outCurlib=$(pwd)/android-lib-curl/$AOSP_ABI
 if [ ! -d $(pwd)/android-lib-curl ];then
- mkdir $(pwd)/android-lib_curl
+  mkdir $(pwd)/android-lib_curl
 fi
 
 if [ ! -d $outCurlib  ];then
- mkdir $outCurlib
+  mkdir $outCurlib
 fi
 
 ./configure \
