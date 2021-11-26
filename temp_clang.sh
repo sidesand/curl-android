@@ -248,12 +248,6 @@ if [ ! -d $openssll_lib  ];then
  mkdir -p $openssll_lib
 fi
 
-export outPutlib=$openssll_lib/lib
-
-if [ ! -d $outPutlib ];then
- mkdir -p $outPutlib
-fi 
-
 export CC="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang --sysroot=$AOSP_SYSROOT"
 
 
@@ -283,7 +277,7 @@ cd  openssl
 # make
 
 ## 最终成MakeFile
- ./config --libdir=$outPutlib no-asm shared no-cast no-idea no-camellia  --prefix=$openssll_lib 
+ ./config  no-asm shared no-cast no-idea no-camellia  --prefix=$openssll_lib  --openssldir=$openssll_lib 
 
 # 如何支持https 需要先交叉编译https
 
@@ -296,6 +290,10 @@ if [ $EXITCODE -ne 0 ]; then
 	exit $EXITCODE
 fi
 # CPPFLAGS="-I$(pwd)/openssl/include" LDFLAGS="-L$(pwd)/openssl/lib"
+
+
+cd $openssll_lib
+ls 
 
 echo "start build curl"
 
