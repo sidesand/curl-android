@@ -256,10 +256,16 @@ export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSR
 
 #####################################################################
 
-export openssll_lib=$(pwd)/android-lib-openssl/$AOSP_ABI
+export opensslDir=$(pwd)/android-lib-openssl/$AOSP_ABI
 
-if [ ! -d $openssll_lib  ];then
- mkdir -p $openssll_lib
+if [ ! -d $opensslDir  ];then
+ mkdir -p $opensslDir
+fi
+
+export openssl_lib=$opensslDir/lib
+
+if [ ! -d $openssl_lib  ];then
+ mkdir -p $openssl_lib
 fi
 
 export CC="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang --sysroot=$AOSP_SYSROOT"
@@ -287,12 +293,17 @@ cd  $SSLPATH
 
 pwd
 
+
 # PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$PATH
 # ./Configure $openssl_target -D__ANDROID_API__=$API
 # make
 
 ## 最终成MakeFile
- ./config $openssl_target no-asm shared no-cast no-idea no-camellia  --prefix=$openssll_lib  --openssldir=$openssll_lib 
+ ./config  --libdir=$openssl_lib no-asm no-async shared no-md2 no-md4 no-mdc2 no-poly1305 no-blake2 \
+ no-siphash no-sm3 no-rc2 no-rc4 no-rc5 no-idea no-aria no-bf no-cast \
+ no-camellia no-seedno-sm4 no-chacha no-ec no-dsa no-sm2 no-dso  \
+ no-engine no-err no-comp no-ocsp no-cms no-ts no-srp no-cmac no-ct \
+ --prefix=$openssll_lib  --openssldir=$openssll_lib 
 
 # 如何支持https 需要先交叉编译https
 
@@ -351,7 +362,7 @@ fi
     --enable-static \
     --enable-shared \
     --host=$TOOLNAME_BASE\
-    --with-ssl=$openssll_lib \
+    --with-ssl=$opensslDir \
     --without-zlib
 
 
