@@ -289,18 +289,40 @@ cd  openssl
 
 make -j4
 
+EXITCODE=$?
+if [ $EXITCODE -ne 0 ]; then
+	echo "Error building the libssl and libcrypto"
+	cd $PWD
+	exit $EXITCODE
+fi
 # CPPFLAGS="-I$(pwd)/openssl/include" LDFLAGS="-L$(pwd)/openssl/lib"
 
 echo "start build curl"
 
 cd ../
-cd curl
-# # ./Configure android no-asm no-shared no-cast no-idea no-camellia no-whirpool
+
 export outCurlib=$(pwd)/android-lib-curl/$AOSP_ABI
 
 if [ ! -d $outCurlib  ];then
   mkdir -p $outCurlib
 fi
+
+cd curl
+# # ./Configure android no-asm no-shared no-cast no-idea no-camellia no-whirpool
+if [ ! -x "$CURLPATH/configure" ]; then
+	echo "Curl needs external tools to be compiled"
+	echo "Make sure you have autoconf, automake and libtool installed"
+
+	./buildconf
+
+	EXITCODE=$?
+	if [ $EXITCODE -ne 0 ]; then
+		echo "Error running the buildconf program"
+		cd $PWD
+		exit $EXITCODE
+	fi
+fi
+
 
 ./configure \
     --prefix=$outCurlib \
