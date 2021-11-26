@@ -12,7 +12,7 @@
 # ====================================================================
 
 real_path() {
-	[[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+	echo "$PWD"
 }
 
 
@@ -33,9 +33,11 @@ export API=21
 
 REL_SCRIPT_PATH="$(dirname $0)"
 SCRIPTPATH=$(real_path $REL_SCRIPT_PATH)
-CURLPATH="$SCRIPTPATH/../curl"
-SSLPATH="$SCRIPTPATH/../openssl"
+CURLPATH="$SCRIPTPATH/curl"
+SSLPATH="$SCRIPTPATH/openssl"
 
+echo "CURLPATH=$CURLPATH"
+echo "SSLPATH=$SSLPATH"
 
 if [ -f /proc/cpuinfo ]; then
 	JOBS=$(grep flags /proc/cpuinfo |wc -l)
@@ -102,7 +104,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="armv7a-linux-androideabi"
     AOSP_ABI="armeabi-v7a"
     AOSP_ARCH="arch-arm"
-    openssl_target="android_arm"
+    openssl_target="android-arm"
     AOSP_FLAGS="-march=armv7-a -mthumb -mfpu=vfpv3-d16 -mfloat-abi=softfp -Wl,--fix-cortex-a8 -funwind-tables -fexceptions -frtti"
     ;;
   hard|armv7a-hard|armeabi-v7a-hard)
@@ -110,7 +112,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="armv7a-linux-androideabi"
     AOSP_ABI="armeabi-v7a"
     AOSP_ARCH="arch-arm"
-    openssl_target="android_arm"
+    openssl_target="android-arm"
     AOSP_FLAGS="-mhard-float -D_NDK_MATH_NO_SOFTFP=1 -march=armv7-a -mfpu=vfpv3-d16 -mfloat-abi=softfp -Wl,--fix-cortex-a8 -funwind-tables -fexceptions -frtti -Wl,--no-warn-mismatch -Wl,-lm_hard"
     ;;
   neon|armv7a-neon)
@@ -118,7 +120,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="armv7a-linux-androideabi"
     AOSP_ABI="armeabi-v7a"
     AOSP_ARCH="arch-arm"
-    openssl_target="android_arm"
+    openssl_target="android-arm"
     AOSP_FLAGS="-march=armv7-a -mfpu=vfpv3-d16 -mfloat-abi=softfp -Wl,--fix-cortex-a8 -funwind-tables -fexceptions -frtti"
     ;;
   armv8|armv8a|aarch64|arm64|arm64-v8a)
@@ -126,7 +128,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="aarch64-linux-android"
     AOSP_ABI="arm64-v8a"
     AOSP_ARCH="arch-arm64"
-    openssl_target="android_arm64"
+    openssl_target="android-arm64"
     AOSP_FLAGS="-funwind-tables -fexceptions -frtti"
     ;;
   x86)
@@ -134,7 +136,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="i686-linux-android"
     AOSP_ABI="x86"
     AOSP_ARCH="arch-x86"
-    openssl_target="android_x86"
+    openssl_target="android-x86"
     AOSP_FLAGS="-march=i686 -mtune=intel -mssse3 -mfpmath=sse -funwind-tables -fexceptions -frtti"
     ;;
   x86_64|x64)
@@ -142,7 +144,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="x86_64-linux-android"
     AOSP_ABI="x86_64"
     AOSP_ARCH="arch-x86_64"
-    openssl_target="android_x86_64"
+    openssl_target="android-x86_64"
     AOSP_FLAGS="-march=x86-64 -msse4.2 -mpopcnt -mtune=intel -funwind-tables -fexceptions -frtti"
     ;;
   *)
@@ -283,13 +285,14 @@ echo "start build openssl"
 
 cd  $SSLPATH
 
+pwd
 
 # PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$PATH
 # ./Configure $openssl_target -D__ANDROID_API__=$API
 # make
 
 ## 最终成MakeFile
- ./config  no-asm shared no-cast no-idea no-camellia  --prefix=$openssll_lib  --openssldir=$openssll_lib 
+ ./config $openssl_target no-asm shared no-cast no-idea no-camellia  --prefix=$openssll_lib  --openssldir=$openssll_lib 
 
 # 如何支持https 需要先交叉编译https
 
@@ -349,7 +352,7 @@ make -j4
 
 EXITCODE=$?
 if [ $EXITCODE -ne 0 ]; then
-	echo "Error building the libssl and libcrypto"
+	echo "Error building the curl"
 	cd $PWD
 	exit $EXITCODE
 fi
