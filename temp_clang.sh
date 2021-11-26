@@ -302,7 +302,12 @@ pwd
  ./config --libdir=$openssl_lib  no-asm shared no-cast no-idea no-camellia  --prefix=$opensslDir  --openssldir=$opensslDir \
  no-comp
 
-# 如何支持https 需要先交叉编译https
+EXITCODE=$?
+if [ $EXITCODE -ne 0 ]; then
+	echo "Error building the libssl and libcrypto"
+	cd $PWD
+	exit $EXITCODE
+fi
 
 make clean
 
@@ -310,21 +315,10 @@ make -j6
 
 make install
 
-EXITCODE=$?
-if [ $EXITCODE -ne 0 ]; then
-	echo "Error building the libssl and libcrypto"
-	cd $PWD
-	exit $EXITCODE
-fi
-# CPPFLAGS="-I$(pwd)/openssl/include" LDFLAGS="-L$(pwd)/openssl/lib"
-
-
-cd $openssll_lib
-ls 
 
 echo "start build curl"
 
-cd ..
+cd REL_SCRIPT_PATH
 echo "当前目录: "
 pwd
 
