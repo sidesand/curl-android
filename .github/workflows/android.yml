@@ -43,10 +43,10 @@ jobs:
         working-directory:   
         run: |
           pwd  
-          chmod +x temp_clang.sh
+          chmod +x startbulid.sh
           echo ${{ steps.setup-ndk.outputs.ndk-path }}
           export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
-          ./temp_clang.sh armeabi-v7a
+          ./startbulid.sh
       - name: Upload a Build Artifact  
         uses: actions/upload-artifact@v2
         with:

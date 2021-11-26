@@ -303,7 +303,7 @@ pwd
 
 ## 最终成MakeFile
  ./config --libdir=$openssl_lib  no-asm shared no-cast no-idea no-camellia  --prefix=$opensslDir  --openssldir=$opensslDir \
- no-comp
+ no-comp --host=$TOOLNAME_BASE
 
 EXITCODE=$?
 if [ $EXITCODE -ne 0 ]; then

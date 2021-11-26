@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-export ANDROID_NDK_ROOT="/mnt/c/other/ndk/android-ndk-r20"
+# export ANDROID_NDK_ROOT="/mnt/c/other/ndk/android-ndk-r20"
 # r20 没有gcc
 # for arch in armeabi armeabi-v7a armeabi-v7a-hard arm64-v8a mips mips64 x86 x86_64
 #for arch in armeabi-v7a
 # clang 只支持 armeabi-v7a arm64-v8a x86 x86_64
-for arch in armeabi-v7a
+for arch in armeabi-v7a arm64-v8a x86 x86_64
 do
     ./temp_clang.sh $arch 
 done
