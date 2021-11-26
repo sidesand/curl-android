@@ -312,8 +312,6 @@ if [ $EXITCODE -ne 0 ]; then
 	exit $EXITCODE
 fi
 
-make clean
-
 make -j6
 
 make install
@@ -357,8 +355,6 @@ fi
     --with-ssl=$opensslDir \
     --without-zlib
 
-
-make clean
 
 make -j6
 
