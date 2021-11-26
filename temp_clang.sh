@@ -90,6 +90,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="armv7a-linux-androideabi"
     AOSP_ABI="armeabi-v7a"
     AOSP_ARCH="arch-arm"
+    openssl_target="android_arm"
     AOSP_FLAGS="-march=armv7-a -mthumb -mfpu=vfpv3-d16 -mfloat-abi=softfp -Wl,--fix-cortex-a8 -funwind-tables -fexceptions -frtti"
     ;;
   hard|armv7a-hard|armeabi-v7a-hard)
@@ -97,6 +98,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="armv7a-linux-androideabi"
     AOSP_ABI="armeabi-v7a"
     AOSP_ARCH="arch-arm"
+    openssl_target="android_arm"
     AOSP_FLAGS="-mhard-float -D_NDK_MATH_NO_SOFTFP=1 -march=armv7-a -mfpu=vfpv3-d16 -mfloat-abi=softfp -Wl,--fix-cortex-a8 -funwind-tables -fexceptions -frtti -Wl,--no-warn-mismatch -Wl,-lm_hard"
     ;;
   neon|armv7a-neon)
@@ -104,6 +106,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="armv7a-linux-androideabi"
     AOSP_ABI="armeabi-v7a"
     AOSP_ARCH="arch-arm"
+    openssl_target="android_arm"
     AOSP_FLAGS="-march=armv7-a -mfpu=vfpv3-d16 -mfloat-abi=softfp -Wl,--fix-cortex-a8 -funwind-tables -fexceptions -frtti"
     ;;
   armv8|armv8a|aarch64|arm64|arm64-v8a)
@@ -111,6 +114,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="aarch64-linux-android"
     AOSP_ABI="arm64-v8a"
     AOSP_ARCH="arch-arm64"
+    openssl_target="android_arm64"
     AOSP_FLAGS="-funwind-tables -fexceptions -frtti"
     ;;
   x86)
@@ -118,6 +122,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="i686-linux-android"
     AOSP_ABI="x86"
     AOSP_ARCH="arch-x86"
+    openssl_target="android_x86"
     AOSP_FLAGS="-march=i686 -mtune=intel -mssse3 -mfpmath=sse -funwind-tables -fexceptions -frtti"
     ;;
   x86_64|x64)
@@ -125,6 +130,7 @@ case "$THE_ARCH" in
     TOOLNAME_BASE="x86_64-linux-android"
     AOSP_ABI="x86_64"
     AOSP_ARCH="arch-x86_64"
+    openssl_target="android_x86_64"
     AOSP_FLAGS="-march=x86-64 -msse4.2 -mpopcnt -mtune=intel -funwind-tables -fexceptions -frtti"
     ;;
   *)
@@ -236,20 +242,16 @@ export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSR
 
 #####################################################################
 
-export PREFIX=$(pwd)/android-lib-openssl
+export PREFIX=$(pwd)/android-lib-openssl/$AOSP_ABI
 if [ ! -d $(pwd)/android-lib-openssl ];then
- mkdir $(pwd)/android-lib 
+ mkdir $(pwd)/android-lib-openssl
 fi
 
 if [ ! -d $PREFIX  ];then
  mkdir $PREFIX
 fi
 
-export outPutlib=$PREFIX/$AOSP_ABI/soLib
-
-if [ ! -d $PREFIX/$AOSP_AB ];then
- mkdir $PREFIX/$AOSP_AB
-fi
+export outPutlib=$PREFIX/lib
 
 if [ ! -d $outPutlib ];then
  mkdir $outPutlib
@@ -274,27 +276,41 @@ if [ ! -z "$VERBOSE" ] && [ "$VERBOSE" != "0" ]; then
 
 fi
 
-cd  openssl
+cd  curl
+
+
+# PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$PATH
+# ./Configure $openssl_target -D__ANDROID_API__=$API
+# make
+
 ## 最终成MakeFile
- ./config --libdir=$outPutlib no-asm shared no-cast no-idea no-camellia  --prefix=$PREFIX  zlib
+ ./config --libdir=$outPutlib no-asm shared no-cast no-idea no-camellia  --prefix=$PREFIX 
 
 # 如何支持https 需要先交叉编译https
 
-make -j3
-
-make install
+make -j4
 
 # CPPFLAGS="-I$(pwd)/openssl/include" LDFLAGS="-L$(pwd)/openssl/lib"
 
 
 # # ./Configure android no-asm no-shared no-cast no-idea no-camellia no-whirpool
+export outCurlib=$(pwd)/android-lib-curl/$AOSP_ABI
+if [ ! -d $(pwd)/android-lib-curl ];then
+ mkdir $(pwd)/android-lib_curl
+fi
 
-# ./configure \
-#     --prefix=$PREFIX \
-#     --enable-static \
-#     --enable-shared \
-#     --host=$TOOLNAME_BASE\
-#     --with-ssl=$(pwd)/openssl \
-#     --without-zlib
+if [ ! -d $outCurlib  ];then
+ mkdir $outCurlib
+fi
+
+./configure \
+    --prefix=$outCurlib \
+    --enable-static \
+    --enable-shared \
+    --host=$TOOLNAME_BASE\
+    --with-ssl=$(pwd)/android-lib-openssl/$AOSP_AB \
+    --without-zlib
+
+make -j4
 
 [ "$0" = "$BASH_SOURCE" ] && exit 0 || return 0cd .

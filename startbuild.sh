@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 export ANDROID_NDK_ROOT="/mnt/c/other/ndk/android-ndk-r20"
 # r20 没有gcc
 # for arch in armeabi armeabi-v7a armeabi-v7a-hard arm64-v8a mips mips64 x86 x86_64
@@ -7,6 +9,8 @@ for arch in armeabi-v7a
 do
     ./temp_clang.sh $arch 
 done
+
+ 
 
 # CPPFLAGS="-I$(pwd)/openssl/include" LDFLAGS="-L$(pwd)/openssl/lib" \
 
