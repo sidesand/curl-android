@@ -242,16 +242,16 @@ export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSR
 
 #####################################################################
 
-export PREFIX=$(pwd)/android-lib-openssl/$AOSP_ABI
+export openssll_lib=$(pwd)/android-lib-openssl/$AOSP_ABI
 if [ ! -d $(pwd)/android-lib-openssl ];then
  mkdir $(pwd)/android-lib-openssl
 fi
 
-if [ ! -d $PREFIX  ];then
- mkdir $PREFIX
+if [ ! -d $openssll_lib  ];then
+ mkdir $openssll_lib
 fi
 
-export outPutlib=$PREFIX/lib
+export outPutlib=$openssll_lib/lib
 
 if [ ! -d $outPutlib ];then
  mkdir $outPutlib
@@ -276,6 +276,8 @@ if [ ! -z "$VERBOSE" ] && [ "$VERBOSE" != "0" ]; then
 
 fi
 
+echo "start build openssl"
+
 cd  openssl
 
 
@@ -284,7 +286,7 @@ cd  openssl
 # make
 
 ## 最终成MakeFile
- ./config --libdir=$outPutlib no-asm shared no-cast no-idea no-camellia  --prefix=$PREFIX 
+ ./config --libdir=$outPutlib no-asm shared no-cast no-idea no-camellia  --prefix=$openssll_lib 
 
 # 如何支持https 需要先交叉编译https
 
@@ -292,12 +294,13 @@ make -j4
 
 # CPPFLAGS="-I$(pwd)/openssl/include" LDFLAGS="-L$(pwd)/openssl/lib"
 
+echo "start build curl"
 
 cd curl
 # # ./Configure android no-asm no-shared no-cast no-idea no-camellia no-whirpool
 export outCurlib=$(pwd)/android-lib-curl/$AOSP_ABI
 if [ ! -d $(pwd)/android-lib-curl ];then
-  mkdir $(pwd)/android-lib_curl
+  mkdir $(pwd)/android-lib-curl
 fi
 
 if [ ! -d $outCurlib  ];then
@@ -309,7 +312,7 @@ fi
     --enable-static \
     --enable-shared \
     --host=$TOOLNAME_BASE\
-    --with-ssl=$(pwd)/android-lib-openssl/$AOSP_AB \
+    --with-ssl=$openssll_lib \
     --without-zlib
 
 make -j4
