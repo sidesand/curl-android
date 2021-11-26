@@ -11,6 +11,11 @@
 # See http://www.cryptopp.com/wiki/Android_(Command_Line) for more details
 # ====================================================================
 
+real_path() {
+	[[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
+
 unset IS_CROSS_COMPILE
 
 unset IS_IOS
@@ -24,6 +29,13 @@ unset AOSP_STL_LIB
 unset AOSP_BITS_INC
 
 export API=21 
+
+
+REL_SCRIPT_PATH="$(dirname $0)"
+SCRIPTPATH=$(real_path $REL_SCRIPT_PATH)
+CURLPATH="$SCRIPTPATH/../curl"
+SSLPATH="$SCRIPTPATH/../openssl"
+
 
 if [ -f /proc/cpuinfo ]; then
 	JOBS=$(grep flags /proc/cpuinfo |wc -l)
@@ -269,7 +281,7 @@ fi
 
 echo "start build openssl"
 
-cd  openssl
+cd  $SSLPATH
 
 
 # PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$PATH
@@ -297,7 +309,8 @@ ls
 
 echo "start build curl"
 
-cd ../
+cd ..
+echo "当前目录:$pwd "
 
 export outCurlib=$(pwd)/android-lib-curl/$AOSP_ABI
 
@@ -305,7 +318,9 @@ if [ ! -d $outCurlib  ];then
   mkdir -p $outCurlib
 fi
 
-cd curl
+echo "当前目录:$pwd "
+
+cd  $CURLPATH
 # # ./Configure android no-asm no-shared no-cast no-idea no-camellia no-whirpool
 if [ ! -x "configure" ]; then
 	echo "Curl needs external tools to be compiled"
