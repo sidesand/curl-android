@@ -47,7 +47,11 @@ jobs:
           echo ${{ steps.setup-ndk.outputs.ndk-path }}
           export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
           ./temp_clang.sh armeabi-v7a
-          cd android-lib
+             echo "android-lib-curl文件："
+          cd android-lib-curl
+          ls
+          echo "android-lib-openssl文件："
+          cd android-lib-openssl
           ls
       - name: Upload a Build Artifact  
         uses: actions/upload-artifact@v2

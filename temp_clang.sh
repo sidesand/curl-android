@@ -243,18 +243,15 @@ export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSR
 #####################################################################
 
 export openssll_lib=$(pwd)/android-lib-openssl/$AOSP_ABI
-if [ ! -d $(pwd)/android-lib-openssl ];then
- mkdir $(pwd)/android-lib-openssl
-fi
 
 if [ ! -d $openssll_lib  ];then
- mkdir $openssll_lib
+ mkdir -p $openssll_lib
 fi
 
 export outPutlib=$openssll_lib/lib
 
 if [ ! -d $outPutlib ];then
- mkdir $outPutlib
+ mkdir -p $outPutlib
 fi 
 
 export CC="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang --sysroot=$AOSP_SYSROOT"
@@ -299,12 +296,9 @@ echo "start build curl"
 cd curl
 # # ./Configure android no-asm no-shared no-cast no-idea no-camellia no-whirpool
 export outCurlib=$(pwd)/android-lib-curl/$AOSP_ABI
-if [ ! -d $(pwd)/android-lib-curl ];then
-  mkdir $(pwd)/android-lib-curl
-fi
 
 if [ ! -d $outCurlib  ];then
-  mkdir $outCurlib
+  mkdir -p $outCurlib
 fi
 
 ./configure \
