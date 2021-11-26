@@ -299,11 +299,8 @@ pwd
 # make
 
 ## 最终成MakeFile
- ./config  --libdir=$openssl_lib no-asm no-async shared no-md2 no-md4 no-mdc2 no-poly1305 no-blake2 \
- no-siphash no-sm3 no-rc2 no-rc4 no-rc5 no-idea no-aria no-bf no-cast \
- no-camellia no-seedno-sm4 no-chacha no-ec no-dsa no-sm2 no-dso  \
- no-engine no-err no-comp no-ocsp no-cms no-ts no-srp no-cmac no-ct \
- --prefix=$openssll_lib  --openssldir=$openssll_lib 
+ ./config --libdir=$openssl_lib  no-asm shared no-cast no-idea no-camellia  --prefix=$opensslDir  --openssldir=$opensslDir \
+ no-comp
 
 # 如何支持https 需要先交叉编译https
 
