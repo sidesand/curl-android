@@ -296,7 +296,11 @@ pwd
 
 # 如何支持https 需要先交叉编译https
 
-make -j4
+make clean
+
+make -j6
+
+make install
 
 EXITCODE=$?
 if [ $EXITCODE -ne 0 ]; then
@@ -313,7 +317,8 @@ ls
 echo "start build curl"
 
 cd ..
-echo "当前目录:$pwd "
+echo "当前目录: "
+pwd
 
 export outCurlib=$(pwd)/android-lib-curl/$AOSP_ABI
 
@@ -321,7 +326,8 @@ if [ ! -d $outCurlib  ];then
   mkdir -p $outCurlib
 fi
 
-echo "当前目录:$pwd "
+echo "outCurlib =$outCurlib \n 当前目录: "
+pwd
 
 cd  $CURLPATH
 # # ./Configure android no-asm no-shared no-cast no-idea no-camellia no-whirpool
@@ -348,7 +354,12 @@ fi
     --with-ssl=$openssll_lib \
     --without-zlib
 
-make -j4
+
+make clean
+
+make -j6
+
+make install
 
 EXITCODE=$?
 if [ $EXITCODE -ne 0 ]; then
