@@ -293,6 +293,7 @@ make -j4
 
 echo "start build curl"
 
+cd ../
 cd curl
 # # ./Configure android no-asm no-shared no-cast no-idea no-camellia no-whirpool
 export outCurlib=$(pwd)/android-lib-curl/$AOSP_ABI
