@@ -268,6 +268,9 @@ if [ ! -d $openssl_lib  ];then
  mkdir -p $openssl_lib
 fi
 
+
+echo "openssl输出目录 =$opensslDir "
+
 export CC="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang --sysroot=$AOSP_SYSROOT"
 
 
@@ -318,9 +321,7 @@ make install
 
 echo "start build curl"
 
-cd REL_SCRIPT_PATH
-echo "当前目录: "
-pwd
+cd ..
 
 export outCurlib=$(pwd)/android-lib-curl/$AOSP_ABI
 
@@ -328,7 +329,7 @@ if [ ! -d $outCurlib  ];then
   mkdir -p $outCurlib
 fi
 
-echo "outCurlib =$outCurlib \n 当前目录: "
+echo "Curlib输出目录 =$outCurlib "
 pwd
 
 cd  $CURLPATH
