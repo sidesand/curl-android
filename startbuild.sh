@@ -7,7 +7,7 @@
 # clang 只支持 armeabi-v7a arm64-v8a x86 x86_64
 for arch in armeabi-v7a arm64-v8a x86 x86_64
 do
-    chmod +x startbuild.sh
+     chmod +x temp_clang.sh
     ./temp_clang.sh $arch 
 done
 

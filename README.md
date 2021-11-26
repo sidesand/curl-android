@@ -1,7 +1,10 @@
 # curl-android
 curl 交叉编译 Android
 
-curl编译文档 ： https://curl.se/docs/install.html
+
+## curl编译
+
+文档 ： [https://curl.se/docs/install.html](https://curl.se/docs/install.html)
 
 When building curl for Android it's recommended to use a Linux environment since using curl's configure script is the easiest way to build curl for Android. Before you can build curl for Android, you need to install the Android NDK first. This can be done using the SDK Manager that is part of Android Studio. Once you have installed the Android NDK, you need to figure out where it has been installed and then set up some environment variables before launching configure. On macOS, those variables could look like this to compile for aarch64 and API level 29:
 ```
@@ -25,6 +28,7 @@ Note that this will not give you SSL/TLS support. If you need SSL/TLS, you have 
 Note, however, that you must target at least Android M (API level 23) or configure will not be able to detect OpenSSL since stderr (and the like) were not defined before Android M.
 
 
-
-openssl编译文档：https://github.com/openssl/openssl/blob/master/INSTALL.md 和 https://github.com/openssl/openssl/blob/master/NOTES-ANDROID.md
+## openssl编译
+- 文档：[https://github.com/openssl/openssl/blob/master/INSTALL.md](https://github.com/openssl/openssl/blob/master/INSTALL.md)
+- Android：[https://github.com/openssl/openssl/blob/master/NOTES-ANDROID.md](https://github.com/openssl/openssl/blob/master/NOTES-ANDROID.md)
 
