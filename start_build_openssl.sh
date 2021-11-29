@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
 export ANDROID_NDK_ROOT="/mnt/c/other/ndk/android-ndk-r20"
 export opensslDir=$(pwd)/android-lib-openssl/$AOSP_ABI
-cd  openssl
 
 if [ ! -d $opensslDir  ];then
  mkdir -p $opensslDir
 fi
+
+export openssl_lib=$opensslDir/lib
+
+if [ ! -d $openssl_lib  ];then
+ mkdir -p $openssl_lib
+fi
+cd  openssl
+
 #here are android-arm, android-arm64, android-mips, android-mip64, android-x86 and android-x86_64 (*MIPS targets are no longer supported with NDK R20+).
 
 for arch in android-arm android-arm64 android-x86 android-x86_64
