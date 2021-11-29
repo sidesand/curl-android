@@ -245,6 +245,7 @@ PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/$host/bin:$ANDROID_NDK_ROOT/tool
 ## 最终成MakeFile
 ./Configure $openssl_target --release -latomic --libdir=$openssl_lib no-asm shared no-cast no-idea no-camellia no-comp -D__ANDROID_API__=$API --prefix=$opensslDir  --openssldir=$opensslDir
 
+make -j$JOBS
 
 EXITCODE=$?
 if [ $EXITCODE -ne 0 ]; then
@@ -252,8 +253,6 @@ if [ $EXITCODE -ne 0 ]; then
 	cd $PWD
 	exit $EXITCODE
 fi
-
-make -j$JOBS
 
 make install
 
@@ -354,8 +353,21 @@ fi
     --without-zlib
 
 
-make -j$JOBS
+EXITCODE=$?
+if [ $EXITCODE -ne 0 ]; then
+	echo "Error building the curl"
+	cd $PWD
+	exit $EXITCODE
+fi
 
+
+make -j$JOBS
+EXITCODE=$?
+if [ $EXITCODE -ne 0 ]; then
+	echo "Error building the curl"
+	cd $PWD
+	exit $EXITCODE
+fi
 make install
 
 EXITCODE=$?
@@ -364,5 +376,6 @@ if [ $EXITCODE -ne 0 ]; then
 	cd $PWD
 	exit $EXITCODE
 fi
+cd ..
 
 [ "$0" = "$BASH_SOURCE" ] && exit 0 || return 0cd .
