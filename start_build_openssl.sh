@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 export ANDROID_NDK_ROOT="/mnt/c/other/ndk/android-ndk-r20"
-cd  openssl
-
 export opensslDir=$(pwd)/android-lib-openssl/$AOSP_ABI
+cd  openssl
 
 if [ ! -d $opensslDir  ];then
  mkdir -p $opensslDir
@@ -14,5 +13,6 @@ do
     PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$PATH
     ./Configure  --libdir=$openssl_lib no-asm shared no-cast no-idea no-camellia no-comp -D__ANDROID_API__=21 --prefix=$opensslDir  --openssldir=$opensslDir
     make
+    make install
 done
 
