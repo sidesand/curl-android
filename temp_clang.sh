@@ -243,7 +243,7 @@ PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/$host/bin:$ANDROID_NDK_ROOT/tool
 
 
 ## 最终成MakeFile
-./Configure $openssl_target --libdir=$openssl_lib no-asm shared no-cast no-idea no-camellia no-comp -D__ANDROID_API__=$API --prefix=$opensslDir  --openssldir=$opensslDir
+./Configure $openssl_target --release -latomic --libdir=$openssl_lib no-asm shared no-cast no-idea no-camellia no-comp -D__ANDROID_API__=$API --prefix=$opensslDir  --openssldir=$opensslDir
 
 
 EXITCODE=$?
