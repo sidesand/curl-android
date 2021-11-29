@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-export ANDROID_NDK_ROOT="/mnt/c/other/ndk/android-ndk-r20"
+#export ANDROID_NDK_ROOT="/mnt/c/other/ndk/android-ndk-r20"
 export opensslDir=$(pwd)/android-lib-openssl/$AOSP_ABI
 
 if [ ! -d $opensslDir  ];then
