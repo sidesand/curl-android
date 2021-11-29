@@ -43,10 +43,10 @@ jobs:
         working-directory:   
         run: |
           pwd  
-          chmod +x startbuild.sh
+          chmod +x start_build_openssl.sh
           echo ${{ steps.setup-ndk.outputs.ndk-path }}
           export ANDROID_NDK_ROOT=${{ steps.setup-ndk.outputs.ndk-path }}
-          ./startbuild.sh
+          ./start_build_openssl.sh
       - name: Upload a Build Artifact  
         uses: actions/upload-artifact@v2
         with:

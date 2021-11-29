@@ -12,7 +12,7 @@ fi
 for arch in android-arm android-arm64 android-x86 android-x86_64
 do
     PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$PATH
-    ./Configure $openssl_target -D__ANDROID_API__=21 --prefix=$opensslDir  --openssldir=$opensslDir
+    ./Configure -D__ANDROID_API__=21 --prefix=$opensslDir  --openssldir=$opensslDir
     make
 done
 
