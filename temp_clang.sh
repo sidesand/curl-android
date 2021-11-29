@@ -191,7 +191,7 @@ fi
 #   http://android.googlesource.com/platform/ndk/+/ics-mr0/docs/STANDALONE-TOOLCHAIN.html
 # gcc ndk\platforms\android-21\arch-arm64
 # clang $NDK/toolchains/llvm/prebuilt/linux-x86_64/sysroot
-export AOSP_SYSROOT="$ANDROID_NDK_ROOT/sysroot"
+export AOSP_SYSROOT="$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/$host/sysroot"
 
 # TODO: export for the previous GNUmakefile-cross. These can go away eventually.
 export ANDROID_SYSROOT=$AOSP_SYSROOT
