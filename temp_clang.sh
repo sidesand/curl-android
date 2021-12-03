@@ -233,29 +233,6 @@ if [ ! -z "$VERBOSE" ] && [ "$VERBOSE" != "0" ]; then
 
 fi
 
-echo "start build openssl"
-
-cd  $SSLPATH
-
-pwd
-
-PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/$host/bin:$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/$host/bin:$PATH
-
-
-## 最终成MakeFile
-./Configure $openssl_target --libdir=$openssl_lib no-asm shared no-cast no-idea no-camellia no-comp -D__ANDROID_API__=$API --prefix=$opensslDir  --openssldir=$opensslDir
-
-make -j$JOBS
-
-EXITCODE=$?
-if [ $EXITCODE -ne 0 ]; then
-	echo "Error building the libssl and libcrypto"
-	cd $PWD
-	exit $EXITCODE
-fi
-
-make install
-
 #####################################################################
 
 # Android STL. We support GNU, LLVM and STLport out of the box.
@@ -313,6 +290,26 @@ make install
 export CC="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang --sysroot=$AOSP_SYSROOT"
 export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSROOT"
 
+
+echo "start build openssl"
+
+cd  $SSLPATH
+
+pwd
+
+## 最终成MakeFile
+./Configure $openssl_target --libdir=$openssl_lib no-asm shared no-cast no-idea no-camellia no-comp -D__ANDROID_API__=$API --prefix=$opensslDir  --openssldir=$opensslDir
+
+make -j$JOBS
+
+EXITCODE=$?
+if [ $EXITCODE -ne 0 ]; then
+	echo "Error building the libssl and libcrypto"
+	cd $PWD
+	exit $EXITCODE
+fi
+
+make install
 
 echo "start build curl"
 
