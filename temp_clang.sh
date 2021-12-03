@@ -44,7 +44,7 @@ if [ -f /proc/cpuinfo ]; then
 elif [ ! -z $(which sysctl) ]; then
 	JOBS=$(sysctl -n hw.ncpu)
 else
-	JOBS=8
+	JOBS=2
 fi
 
 # Set AOSP_TOOLCHAIN_SUFFIX to your preference of tools and STL library.
@@ -199,42 +199,6 @@ export ANDROID_SYSROOT=$AOSP_SYSROOT
 
 #####################################################################
 
-export opensslDir=$(pwd)/android-lib-openssl/$AOSP_ABI
-
-if [ ! -d $opensslDir  ];then
- mkdir -p $opensslDir
-fi
-
-export openssl_lib=$opensslDir/lib
-
-if [ ! -d $openssl_lib  ];then
- mkdir -p $openssl_lib
-fi
-
-
-echo "openssl输出目录 =$opensslDir "
-
-export CC="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang --sysroot=$AOSP_SYSROOT"
-
-
-VERBOSE=1
-if [ ! -z "$VERBOSE" ] && [ "$VERBOSE" != "0" ]; then
-  echo "job:"$JOBS
-  echo "API:"$API
-  echo "ANDROID_NDK_ROOT: $ANDROID_NDK_ROOT"
-  echo "AOSP_TOOLCHAIN_PATH: $AOSP_TOOLCHAIN_PATH"
-  echo "AOSP_ABI: $AOSP_ABI"  
-  echo "AOSP_API: $AOSP_API"
-  echo "CC: $CC"
-  echo "AOSP_SYSROOT: $AOSP_SYSROOT"
-  echo "AOSP_FLAGS: $AOSP_FLAGS"
-  # echo "AOSP_STL_INC: $AOSP_STL_INC"
-  # echo "AOSP_STL_LIB: $AOSP_STL_LIB"
-
-fi
-
-#####################################################################
-
 # Android STL. We support GNU, LLVM and STLport out of the box.
 
 # if [ "$#" -lt 2 ]; then
@@ -290,6 +254,41 @@ fi
 export CC="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang --sysroot=$AOSP_SYSROOT"
 export CXX="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang++ --sysroot=$AOSP_SYSROOT"
 
+#####################################################################
+
+export opensslDir=$(pwd)/android-lib-openssl/$AOSP_ABI
+
+if [ ! -d $opensslDir  ];then
+ mkdir -p $opensslDir
+fi
+
+export openssl_lib=$opensslDir/lib
+
+if [ ! -d $openssl_lib  ];then
+ mkdir -p $openssl_lib
+fi
+
+
+echo "openssl输出目录 =$opensslDir "
+
+export CC="$AOSP_TOOLCHAIN_PATH/$TOOLNAME_BASE$API-clang --sysroot=$AOSP_SYSROOT"
+
+
+VERBOSE=1
+if [ ! -z "$VERBOSE" ] && [ "$VERBOSE" != "0" ]; then
+  echo "job:"$JOBS
+  echo "API:"$API
+  echo "ANDROID_NDK_ROOT: $ANDROID_NDK_ROOT"
+  echo "AOSP_TOOLCHAIN_PATH: $AOSP_TOOLCHAIN_PATH"
+  echo "AOSP_ABI: $AOSP_ABI"  
+  echo "AOSP_API: $AOSP_API"
+  echo "CC: $CC"
+  echo "AOSP_SYSROOT: $AOSP_SYSROOT"
+  echo "AOSP_FLAGS: $AOSP_FLAGS"
+  # echo "AOSP_STL_INC: $AOSP_STL_INC"
+  # echo "AOSP_STL_LIB: $AOSP_STL_LIB"
+
+fi
 
 echo "start build openssl"
 
@@ -297,10 +296,14 @@ cd  $SSLPATH
 
 pwd
 
-## 最终成MakeFile
-./Configure --libdir=$openssl_lib no-asm shared no-cast no-idea no-camellia no-comp --prefix=$opensslDir  --openssldir=$opensslDir
 
-make -j$JOBS
+# PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$ANDROID_NDK_ROOT/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin:$PATH
+# ./Configure $openssl_target -D__ANDROID_API__=$API
+# make
+
+## 最终成MakeFile
+ ./config --libdir=$openssl_lib  no-asm shared no-cast no-idea no-camellia  --prefix=$opensslDir  --openssldir=$opensslDir \
+ no-comp 
 
 EXITCODE=$?
 if [ $EXITCODE -ne 0 ]; then
@@ -309,7 +312,10 @@ if [ $EXITCODE -ne 0 ]; then
 	exit $EXITCODE
 fi
 
+make -j$JOBS
+
 make install
+
 
 echo "start build curl"
 
@@ -350,21 +356,8 @@ fi
     --without-zlib
 
 
-EXITCODE=$?
-if [ $EXITCODE -ne 0 ]; then
-	echo "Error building the curl"
-	cd $PWD
-	exit $EXITCODE
-fi
-
-
 make -j$JOBS
-EXITCODE=$?
-if [ $EXITCODE -ne 0 ]; then
-	echo "Error building the curl"
-	cd $PWD
-	exit $EXITCODE
-fi
+
 make install
 
 EXITCODE=$?
@@ -373,6 +366,5 @@ if [ $EXITCODE -ne 0 ]; then
 	cd $PWD
 	exit $EXITCODE
 fi
-cd ..
 
 [ "$0" = "$BASH_SOURCE" ] && exit 0 || return 0cd .
