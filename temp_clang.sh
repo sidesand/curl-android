@@ -298,7 +298,7 @@ cd  $SSLPATH
 pwd
 
 ## 最终成MakeFile
-./Configure $openssl_target --libdir=$openssl_lib no-asm shared no-cast no-idea no-camellia no-comp -D__ANDROID_API__=$API --prefix=$opensslDir  --openssldir=$opensslDir
+./Configure --libdir=$openssl_lib no-asm shared no-cast no-idea no-camellia no-comp --prefix=$opensslDir  --openssldir=$opensslDir
 
 make -j$JOBS
 
