@@ -295,7 +295,7 @@ echo "start build openssl"
 cd  $SSLPATH
 
 ## 最终成MakeFile
- ./config --libdir=$openssl_lib  no-asm shared no-cast no-idea no-camellia  --prefix=$opensslDir  --openssldir=$opensslDir \
+ ./config --libdir=$openssl_lib --release --latomic  no-asm shared no-cast no-idea no-camellia  --prefix=$opensslDir  --openssldir=$opensslDir \
  no-comp 
 
 EXITCODE=$?

@@ -5,7 +5,7 @@
 # for arch in armeabi armeabi-v7a armeabi-v7a-hard arm64-v8a mips mips64 x86 x86_64
 #for arch in armeabi-v7a
 # clang 只支持 armeabi-v7a arm64-v8a x86 x86_64
-for arch in armeabi-v7a arm64-v8a
+for arch in  x86 x86_64
 do
      chmod +x temp_clang.sh
     ./temp_clang.sh $arch 
