@@ -16,7 +16,7 @@ jobs:
       # 克隆代码 以及 子模块
       - uses: actions/checkout@v2
         with:
-        submodules: 'true'
+          submodules: 'true'
       - name: Setup Android NDK
       # uses: nttld/setup-ndk@b2abc75192ee2a1ec118c8238fd86dec6d96dc43
         uses: nttld/setup-ndk@v1.0.6
