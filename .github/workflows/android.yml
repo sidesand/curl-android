@@ -13,20 +13,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      # 克隆代码
+      # 克隆代码 以及 子模块
       - uses: actions/checkout@v2
-      # 克隆 子模块
-      - name: Checkout submodules
-        shell: bash
-        run: |
-          # # If your submodules are configured to use SSH instead of HTTPS please uncomment the following line
-          # # git config --global url."https://github.com/".insteadOf "git@github.com:"
-          # auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-          # git submodule sync --recursive
-          # git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-          git submodule init
-          git submodule update
-       # 添加ndk    
+        with:
+        submodules: 'true'
       - name: Setup Android NDK
       # uses: nttld/setup-ndk@b2abc75192ee2a1ec118c8238fd86dec6d96dc43
         uses: nttld/setup-ndk@v1.0.6
