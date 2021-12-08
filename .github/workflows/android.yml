@@ -23,7 +23,7 @@ jobs:
         id: setup-ndk
         with:
           # Exact version to use
-          ndk-version: r21
+          ndk-version: r20
           # Add installation directory to path
           add-to-path: false
       # 执行shell
