@@ -1,8 +1,8 @@
-name: Android CI
+name: Test
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master]
 
 jobs:
   # This workflow contains a single job called "build"
