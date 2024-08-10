@@ -6,31 +6,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      # 克隆代码 以及 子模块
       - uses: actions/checkout@v2
         with:
           submodules: 'true'
       - name: Setup Android NDK
-      # uses: nttld/setup-ndk@b2abc75192ee2a1ec118c8238fd86dec6d96dc43
         uses: nttld/setup-ndk@v1.0.6
         id: setup-ndk
         with:
-          # Exact version to use
-          ndk-version: r20
-          # Add installation directory to path
+          ndk-version: r21
           add-to-path: false
-      # 执行shell
-      - name: add autoconf automake libtool
-        run: brew install autoconf automake libtool    
-      - name: ndk bulid    
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y autoconf automake libtool
+      - name: Run NDK build    
         working-directory:   
         run: |
           pwd  
@@ -47,4 +38,3 @@ jobs:
             ./android-lib-curl/**/lib/
             ./android-lib-openssl/**/include/
             ./android-lib-openssl/**/lib/
-            
